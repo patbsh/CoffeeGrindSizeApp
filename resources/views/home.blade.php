@@ -15,9 +15,10 @@
                     @endif
 
                     @foreach($grinders as $grinder)
-                        <p>{{ $grinder->model }}</p>
+                        <p>{{ $grinder->model }} and the producer is: {{ $grinder->grinder_producer->name }}</p>
                     @endforeach
                 </div>
+                <grind-size-component :grinders="{{$grinders}}"></grind-size-component>
             </div>
         </div>
     </div>
