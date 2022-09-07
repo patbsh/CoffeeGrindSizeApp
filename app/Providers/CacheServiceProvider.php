@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Grinder;
+use App\Models\GrinderProducer;
 use Illuminate\Support\ServiceProvider;
 
 class CacheServiceProvider extends ServiceProvider
@@ -27,8 +28,8 @@ class CacheServiceProvider extends ServiceProvider
         view()->composer('home', function ($view) {
             $view->with(
                 'grinders',
-                cache()->remember('subjects', config('cache.default_cache_time'), function () {
-                    return  Grinder::all();
+                cache()->remember('grinders', config('cache.default_cache_time'), function () {
+                    return  Grinder::with(['grinder_producer'])->where('is_verified', '=', 1)->get();
                 })
             );
         });
