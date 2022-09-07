@@ -3,6 +3,8 @@
 use Illuminate\Support\Str;
 
 return [
+    'default_cache_time' => today()->endOfDay(),
+    'config_cache_time' => now()->addMinutes(10),
 
     /*
     |--------------------------------------------------------------------------

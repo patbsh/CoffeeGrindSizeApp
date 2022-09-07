@@ -14,7 +14,9 @@
                         </div>
                     @endif
 
-                    {{ __('You are logged in!') }}
+                    @foreach($grinders as $grinder)
+                        <p>{{ $grinder->model }}</p>
+                    @endforeach
                 </div>
             </div>
         </div>
