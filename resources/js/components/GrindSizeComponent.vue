@@ -22,8 +22,8 @@
         </div>
         <br>
         <p v-if="selectedGrinder&&selectedGrinder2">
-            {{ recipeGrindNumber }} clicks on {{ selectedGrinder2.grinder_producer.name }} {{ selectedGrinder2.model }} is {{ recipeGrindGeneral }} on {{ selectedGrinder.grinder_producer.name }} {{ selectedGrinder.model }}
-            and it is considered a grind.
+            {{ recipeGrindNumber }} clicks on {{ selectedGrinder2.grinder_producer.name }} {{ selectedGrinder2.model }} is considered a {{ recipeGrindGeneral }} on {{ selectedGrinder.grinder_producer.name }} {{ selectedGrinder.model }}
+            and it will be around the setting of.
         </p>
     </div>
 </template>
@@ -50,9 +50,27 @@ export default {
         });
     },
     updated() {
-        if(this.recipeGrindNumber<this.selectedGrinder2.very_fine+this.selectedGrinder2.range_size)
+        if(this.selectedGrinder2&&this.recipeGrindNumber<this.selectedGrinder2.very_fine+this.selectedGrinder2.range_size)
         {
             this.recipeGrindGeneral = 'very fine';
+        }
+        else if(this.selectedGrinder2&&this.recipeGrindNumber<this.selectedGrinder2.fine+this.selectedGrinder2.range_size){
+            this.recipeGrindGeneral = 'fine';
+        }
+        else if(this.selectedGrinder2&&this.recipeGrindNumber<this.selectedGrinder2.medium+this.selectedGrinder2.range_size){
+            this.recipeGrindGeneral = 'medium';
+        }
+        else if(this.selectedGrinder2&&this.recipeGrindNumber<this.selectedGrinder2.medium_coarse+this.selectedGrinder2.range_size){
+            this.recipeGrindGeneral = 'medium coarse';
+        }
+        else if(this.selectedGrinder2&&this.recipeGrindNumber<this.selectedGrinder2.coarse+this.selectedGrinder2.range_size){
+            this.recipeGrindGeneral = 'coarse';
+        }
+        else if(this.selectedGrinder2&&this.recipeGrindNumber<this.selectedGrinder2.very_coarse+this.selectedGrinder2.range_size){
+            this.recipeGrindGeneral = 'very_coarse';
+        }
+        else if(this.selectedGrinder2&&this.recipeGrindNumber>this.selectedGrinder2.very_coarse+this.selectedGrinder2.range_size){
+            this.recipeGrindGeneral = 'wrong input';
         }
     },
     computed: {},
