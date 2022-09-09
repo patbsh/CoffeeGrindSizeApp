@@ -26,7 +26,7 @@
             {{ recipeGrindNumber }} clicks on {{ selectedGrinder2.grinder_producer.name }} {{ selectedGrinder2.model }}
             is considered a {{ recipeGrindGeneral }} on {{ selectedGrinder.grinder_producer.name }}
             {{ selectedGrinder.model }}
-            and it will be around the setting of.
+            and it will be around the setting of {{ selectedGrinderMin }} to {{ selectedGrinderMax }}.
         </p>
     </div>
 </template>
@@ -41,6 +41,8 @@ export default {
     data() {
         return {
             selectedGrinder: null,
+            selectedGrinderMin: null,
+            selectedGrinderMax: null,
             selectedGrinder2: null,
             preciseOn: null,
             recipeGrindNumber: null,
@@ -56,6 +58,8 @@ export default {
         if (this.selectedGrinder2 && this.recipeGrindNumber != null) {
             if (this.recipeGrindNumber < this.selectedGrinder2.very_fine + this.selectedGrinder2.range_size) {
                 this.recipeGrindGeneral = 'very fine';
+                this.selectedGrinderMin = this.selectedGrinder.very_fine;
+                this.selectedGrinderMax = this.selectedGrinder.very_fine + this.selectedGrinder.range_size;
             } else if (this.recipeGrindNumber < this.selectedGrinder2.fine + this.selectedGrinder2.range_size) {
                 this.recipeGrindGeneral = 'fine';
             } else if (this.recipeGrindNumber < this.selectedGrinder2.medium + this.selectedGrinder2.range_size) {
