@@ -15,14 +15,17 @@
                 </div>
                 <div class="input-group mt-2 mb-2" v-if="preciseOn&&selectedGrinder2">
                     <span class="input-group-text" id="inputGroup-sizing-default">Setting</span>
-                    <input type="number" min="1" :max="selectedGrinder2.very_coarse+selectedGrinder2.range_size" v-model="recipeGrindNumber" class="form-control" aria-label="Sizing example input"
+                    <input type="number" min="1" :max="selectedGrinder2.very_coarse+selectedGrinder2.range_size"
+                           v-model="recipeGrindNumber" class="form-control" aria-label="Sizing example input"
                            aria-describedby="inputGroup-sizing-default">
                 </div>
             </div>
         </div>
         <br>
-        <p v-if="selectedGrinder&&selectedGrinder2">
-            {{ recipeGrindNumber }} clicks on {{ selectedGrinder2.grinder_producer.name }} {{ selectedGrinder2.model }} is considered a {{ recipeGrindGeneral }} on {{ selectedGrinder.grinder_producer.name }} {{ selectedGrinder.model }}
+        <p v-if="selectedGrinder&&selectedGrinder2&&recipeGrindNumber">
+            {{ recipeGrindNumber }} clicks on {{ selectedGrinder2.grinder_producer.name }} {{ selectedGrinder2.model }}
+            is considered a {{ recipeGrindGeneral }} on {{ selectedGrinder.grinder_producer.name }}
+            {{ selectedGrinder.model }}
             and it will be around the setting of.
         </p>
     </div>
@@ -50,28 +53,25 @@ export default {
         });
     },
     updated() {
-        if(this.selectedGrinder2&&this.recipeGrindNumber<this.selectedGrinder2.very_fine+this.selectedGrinder2.range_size)
-        {
-            this.recipeGrindGeneral = 'very fine';
+        if (this.selectedGrinder2 && this.recipeGrindNumber != null) {
+            if (this.recipeGrindNumber < this.selectedGrinder2.very_fine + this.selectedGrinder2.range_size) {
+                this.recipeGrindGeneral = 'very fine';
+            } else if (this.recipeGrindNumber < this.selectedGrinder2.fine + this.selectedGrinder2.range_size) {
+                this.recipeGrindGeneral = 'fine';
+            } else if (this.recipeGrindNumber < this.selectedGrinder2.medium + this.selectedGrinder2.range_size) {
+                this.recipeGrindGeneral = 'medium';
+            } else if (this.recipeGrindNumber < this.selectedGrinder2.medium_coarse + this.selectedGrinder2.range_size) {
+                this.recipeGrindGeneral = 'medium coarse';
+            } else if (this.recipeGrindNumber < this.selectedGrinder2.coarse + this.selectedGrinder2.range_size) {
+                this.recipeGrindGeneral = 'coarse';
+            } else if (this.recipeGrindNumber < this.selectedGrinder2.very_coarse + this.selectedGrinder2.range_size) {
+                this.recipeGrindGeneral = 'very coarse';
+            } else if (this.recipeGrindNumber > this.selectedGrinder2.very_coarse + this.selectedGrinder2.range_size) {
+                this.recipeGrindGeneral = 'wrong input';
+            }
         }
-        else if(this.selectedGrinder2&&this.recipeGrindNumber<this.selectedGrinder2.fine+this.selectedGrinder2.range_size){
-            this.recipeGrindGeneral = 'fine';
-        }
-        else if(this.selectedGrinder2&&this.recipeGrindNumber<this.selectedGrinder2.medium+this.selectedGrinder2.range_size){
-            this.recipeGrindGeneral = 'medium';
-        }
-        else if(this.selectedGrinder2&&this.recipeGrindNumber<this.selectedGrinder2.medium_coarse+this.selectedGrinder2.range_size){
-            this.recipeGrindGeneral = 'medium coarse';
-        }
-        else if(this.selectedGrinder2&&this.recipeGrindNumber<this.selectedGrinder2.coarse+this.selectedGrinder2.range_size){
-            this.recipeGrindGeneral = 'coarse';
-        }
-        else if(this.selectedGrinder2&&this.recipeGrindNumber<this.selectedGrinder2.very_coarse+this.selectedGrinder2.range_size){
-            this.recipeGrindGeneral = 'very_coarse';
-        }
-        else if(this.selectedGrinder2&&this.recipeGrindNumber>this.selectedGrinder2.very_coarse+this.selectedGrinder2.range_size){
-            this.recipeGrindGeneral = 'wrong input';
-        }
+
+
     },
     computed: {},
     methods: {},
