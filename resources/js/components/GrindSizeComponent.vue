@@ -4,29 +4,29 @@
         <div class="row">
             <div class="col-6">
                 <label>Your grinder</label>
-                <v-select label="item_data" :options="grinders" v-model="selectedGrinder"/>
+                <v-select label="item_data" :options="grinders" v-model="userGrinder"/>
             </div>
             <div class="col-6">
                 <label>Recipe grinder</label>
-                <v-select class="mb-2" label="item_data" :options="grinders" v-model="selectedGrinder2"/>
-                <div class="form-check form-switch mt-2 mb-2" v-if="selectedGrinder2">
+                <v-select class="mb-2" label="item_data" :options="grinders" v-model="recipeGrinder"/>
+                <div class="form-check form-switch mt-2 mb-2" v-if="recipeGrinder">
                     <label class="form-check-label" for="flexSwitchCheckDefault">Recipe uses precise setting</label>
                     <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" v-model="preciseOn">
                 </div>
-                <div class="input-group mt-2 mb-2" v-if="preciseOn&&selectedGrinder2">
+                <div class="input-group mt-2 mb-2" v-if="preciseOn&&recipeGrinder">
                     <span class="input-group-text" id="inputGroup-sizing-default">Setting</span>
-                    <input type="number" min="1" :max="selectedGrinder2.very_coarse+selectedGrinder2.range_size"
+                    <input type="number" min="1" :max="recipeGrinder.very_coarse+recipeGrinder.range_size"
                            v-model="recipeGrindNumber" class="form-control" aria-label="Sizing example input"
                            aria-describedby="inputGroup-sizing-default">
                 </div>
             </div>
         </div>
         <br>
-        <p v-if="selectedGrinder&&selectedGrinder2&&recipeGrindNumber">
-            {{ recipeGrindNumber }} clicks on {{ selectedGrinder2.grinder_producer.name }} {{ selectedGrinder2.model }}
-            is considered a {{ recipeGrindGeneral }} on {{ selectedGrinder.grinder_producer.name }}
-            {{ selectedGrinder.model }}
-            and it will be around the setting of {{ selectedGrinderMin }} to {{ selectedGrinderMax }}.
+        <p v-if="userGrinder&&recipeGrinder&&recipeGrindNumber">
+            {{ recipeGrindNumber }} clicks on {{ recipeGrinder.grinder_producer.name }} {{ recipeGrinder.model }}
+            is considered a {{ recipeGrindGeneral }} on {{ userGrinder.grinder_producer.name }}
+            {{ userGrinder.model }}
+            and it will be around the setting of {{ userGrindMin }} to {{ userGrindMax }}.
         </p>
     </div>
 </template>
@@ -40,13 +40,13 @@ export default {
     props: ["grinders"],
     data() {
         return {
-            selectedGrinder: null,
-            selectedGrinderMin: null,
-            selectedGrinderMax: null,
-            selectedGrinder2: null,
-            preciseOn: null,
+            userGrinder: null,
+            userGrindMin: null,
+            userGrindMax: null,
+            recipeGrinder: null,
             recipeGrindNumber: null,
-            recipeGrindGeneral: null
+            recipeGrindGeneral: null,
+            preciseOn: null,
         }
     },
     mounted() {
@@ -55,23 +55,36 @@ export default {
         });
     },
     updated() {
-        if (this.selectedGrinder2 && this.recipeGrindNumber != null) {
-            if (this.recipeGrindNumber < this.selectedGrinder2.very_fine + this.selectedGrinder2.range_size) {
+        if (this.recipeGrinder && this.recipeGrindNumber != null) {
+            if (this.recipeGrindNumber < this.recipeGrinder.very_fine + this.recipeGrinder.range_size) {
                 this.recipeGrindGeneral = 'very fine';
-                this.selectedGrinderMin = this.selectedGrinder.very_fine;
-                this.selectedGrinderMax = this.selectedGrinder.very_fine + this.selectedGrinder.range_size;
-            } else if (this.recipeGrindNumber < this.selectedGrinder2.fine + this.selectedGrinder2.range_size) {
+                this.userGrindMin = this.userGrinder.very_fine;
+                this.userGrindMax = this.userGrinder.very_fine + this.userGrinder.range_size;
+            } else if (this.recipeGrindNumber < this.recipeGrinder.fine + this.recipeGrinder.range_size) {
                 this.recipeGrindGeneral = 'fine';
-            } else if (this.recipeGrindNumber < this.selectedGrinder2.medium + this.selectedGrinder2.range_size) {
+                this.userGrindMin = this.userGrinder.fine;
+                this.userGrindMax = this.userGrinder.fine + this.userGrinder.range_size;
+            } else if (this.recipeGrindNumber < this.recipeGrinder.medium + this.recipeGrinder.range_size) {
                 this.recipeGrindGeneral = 'medium';
-            } else if (this.recipeGrindNumber < this.selectedGrinder2.medium_coarse + this.selectedGrinder2.range_size) {
+                this.userGrindMin = this.userGrinder.medium;
+                this.userGrindMax = this.userGrinder.medium + this.userGrinder.range_size;
+            } else if (this.recipeGrindNumber < this.recipeGrinder.medium_coarse + this.recipeGrinder.range_size) {
                 this.recipeGrindGeneral = 'medium coarse';
-            } else if (this.recipeGrindNumber < this.selectedGrinder2.coarse + this.selectedGrinder2.range_size) {
+                this.userGrindMin = this.userGrinder.medium_coarse;
+                this.userGrindMax = this.userGrinder.medium_coarse + this.userGrinder.range_size;
+            } else if (this.recipeGrindNumber < this.recipeGrinder.coarse + this.recipeGrinder.range_size) {
                 this.recipeGrindGeneral = 'coarse';
-            } else if (this.recipeGrindNumber < this.selectedGrinder2.very_coarse + this.selectedGrinder2.range_size) {
+                this.userGrindMin = this.userGrinder.coarse;
+                this.userGrindMax = this.userGrinder.coarse + this.userGrinder.range_size;
+            } else if (this.recipeGrindNumber < this.recipeGrinder.very_coarse + this.recipeGrinder.range_size) {
                 this.recipeGrindGeneral = 'very coarse';
-            } else if (this.recipeGrindNumber > this.selectedGrinder2.very_coarse + this.selectedGrinder2.range_size) {
-                this.recipeGrindGeneral = 'wrong input';
+                this.userGrindMin = this.userGrinder.very_coarse;
+                this.userGrindMax = this.userGrinder.very_coarse + this.userGrinder.range_size;
+            } else if (this.recipeGrindNumber > this.recipeGrinder.very_coarse + this.recipeGrinder.range_size) {
+                this.recipeGrindNumber = this.recipeGrinder.very_coarse + this.recipeGrinder.range_size;
+                this.recipeGrindGeneral = 'very coarse';
+                this.userGrindMin = this.userGrinder.very_coarse;
+                this.userGrindMax = this.userGrinder.very_coarse + this.userGrinder.range_size;
             }
         }
 
