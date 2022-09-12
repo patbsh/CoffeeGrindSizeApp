@@ -1,5 +1,7 @@
 import './bootstrap';
+window.Form = Form;
 
+import Form from './form';
 import { createApp } from 'vue/dist/vue.esm-bundler';
 
 import TestComponent from './components/TestComponent.vue';

@@ -40,16 +40,74 @@
             {{ userGrinder.grinder_producer.name }}
             {{ userGrinder.model }}.
         </p>
+        <p>Is the grinder you're looking for not on the list? <a @click="showNewGrinderModal = true" href="#">click here</a> to add a new one.</p>
+        <p>If you want to request changes to an existing grinder <a href="#">click here</a>.</p>
+
+            <vue-final-modal v-model="showNewGrinderModal" classes="modal-container" content-class="modal-content">
+                <span class="modal__title">Add a new grinder</span>
+                <form @submit="submitNewGrinder">
+                    <div class="mb-3">
+                        <label for="exampleFormControlInput1" class="form-label">Grinder Model</label>
+                        <input type="text" class="form-control" id="exampleFormControlInput1">
+                    </div>
+                    <div class="mb-3">
+                        <label for="grinderProducer" class="form-label">Grinder producer</label>
+                        <v-select v-model="newGrinderForm.producer_id" :options="producers" :reduce="producers => producers.id" label="name"/>
+                    </div>
+                    <div class="mb-3">
+                        <label for="rangeSize" class="form-label">Range between settings</label>
+                        <input type="number" min="1" class="form-control" id="rangeSize" v-model="newGrinderForm.range_size">
+                    </div>
+                    <div class="mb-3">
+                        <label for="veryFine" class="form-label">Very fine setting <span v-if="newGrinderForm.range_size&&newGrinderForm.very_fine">({{newGrinderForm.very_fine}}-{{newGrinderForm.very_fine+newGrinderForm.range_size}})</span></label>
+                        <input type="number" min="1" class="form-control" id="veryFine" v-model="newGrinderForm.very_fine">
+                    </div>
+                    <div class="mb-3">
+                        <label for="fine" class="form-label">Fine setting <span v-if="newGrinderForm.range_size&&newGrinderForm.fine">({{newGrinderForm.fine}}-{{newGrinderForm.fine+newGrinderForm.range_size}})</span></label>
+                        <input type="number" :min="newGrinderForm.very_fine+newGrinderForm.range_size+1" class="form-control" id="veryFine" v-model="newGrinderForm.fine">
+                    </div>
+                    <div class="mb-3">
+                        <label for="medium" class="form-label">Medium setting <span v-if="newGrinderForm.range_size&&newGrinderForm.medium">({{newGrinderForm.medium}}-{{newGrinderForm.medium+newGrinderForm.range_size}})</span></label>
+                        <input type="number" :min="newGrinderForm.fine+newGrinderForm.range_size+1" class="form-control" id="medium" v-model="newGrinderForm.medium">
+                    </div>
+                    <div class="mb-3">
+                        <label for="mediumCoarse" class="form-label">Medium coarse setting <span v-if="newGrinderForm.range_size&&newGrinderForm.medium_coarse">({{newGrinderForm.medium_coarse}}-{{newGrinderForm.medium_coarse+newGrinderForm.range_size}})</span></label>
+                        <input type="number" :min="newGrinderForm.medium+newGrinderForm.range_size+1" class="form-control" id="mediumCoarse" v-model="newGrinderForm.medium_coarse">
+                    </div>
+                    <div class="mb-3">
+                        <label for="coarse" class="form-label">Coarse setting <span v-if="newGrinderForm.range_size&&newGrinderForm.coarse">({{newGrinderForm.coarse}}-{{newGrinderForm.medium_coarse+newGrinderForm.coarse}})</span></label>
+                        <input type="number" :min="newGrinderForm.medium_coarse+newGrinderForm.range_size+1" class="form-control" id="coarse" v-model="newGrinderForm.coarse">
+                    </div>
+                    <div class="mb-3">
+                        <label for="veryCoarse" class="form-label">Very coarse setting <span v-if="newGrinderForm.range_size&&newGrinderForm.very_coarse">({{newGrinderForm.very_coarse}}-{{newGrinderForm.very_coarse+newGrinderForm.range_size}})</span></label>
+                        <input type="number" :min="newGrinderForm.coarse+newGrinderForm.range_size+1" class="form-control" id="veryCoarse" v-model="newGrinderForm.very_coarse">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleFormControlTextarea1" class="form-label">Notes (optional)</label>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    </div>
+
+                    <button
+                        @click.prevent="submitNewGrinder()"
+                        class="btn btn-primary mx-2">
+                        Submit
+                    </button>
+                </form>
+            </vue-final-modal>
+
     </div>
 </template>
 
 <script>
 import vSelect from 'vue-select';
+import { VueFinalModal, ModalsContainer } from "vue-final-modal";
+
+
 
 export default {
-    components: {vSelect},
+    components: {vSelect, VueFinalModal, ModalsContainer},
     name: "GrindSizeComponent",
-    props: ["grinders"],
+    props: ["grinders","producers"],
     data() {
         return {
             userGrinder: null,
@@ -60,7 +118,20 @@ export default {
             recipeGrindGeneral: null,
             recipeGrinderMode: false,
             generalGrindSizes: ['very fine', 'fine', 'medium', 'medium coarse', 'coarse', 'very coarse'],
-            selectedGeneralGrindSize: null
+            selectedGeneralGrindSize: null,
+            showNewGrinderModal: false,
+            newGrinderForm: new Form({
+                model: null,
+                producer_id: null,
+                range_size: null,
+                very_fine: null,
+                fine: null,
+                medium: null,
+                medium_coarse: null,
+                coarse: null,
+                very_coarse: null,
+                notes: null,
+            }),
         }
     },
     mounted() {
@@ -107,12 +178,37 @@ export default {
 
 
     },
-    computed: {},
-    methods: {},
+    computed: {
+        submitNewGrinder(){
+            console.log('hello');
+        },
+    },
+    methods: {
+
+    },
 }
 
 </script>
 
 <style scoped>
+:deep(.modal-container) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+:deep(.modal-content) {
+    display: flex;
+    width: 50%;
+    flex-direction: column;
+    margin: 0 1rem;
+    padding: 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.25rem;
+    background: #fff;
+}
+.modal__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
 
 </style>

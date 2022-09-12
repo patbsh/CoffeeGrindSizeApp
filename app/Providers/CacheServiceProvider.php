@@ -33,5 +33,14 @@ class CacheServiceProvider extends ServiceProvider
                 })
             );
         });
+
+        view()->composer('home', function ($view) {
+            $view->with(
+                'producers',
+                cache()->remember('producers', config('cache.default_cache_time'), function () {
+                    return  GrinderProducer::all()->where('is_verified', '=', 1);
+                })
+            );
+        });
     }
 }
