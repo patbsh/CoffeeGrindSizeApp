@@ -18,7 +18,7 @@
                     <v-select class="mb-2" label="item_data" :options="grinders" v-model="recipeGrinder"/>
                     <div class="input-group mt-2 mb-4" v-if="recipeGrinderMode&&recipeGrinder">
                         <span class="input-group-text" id="inputGroup-sizing-default">Setting</span>
-                        <input type="number" min="1" :max="recipeGrinder.very_coarse+recipeGrinder.range_size"
+                        <input type="number" min="1" :max="recipeGrinder.very_coarse_max"
                                v-model="recipeGrindNumber" class="form-control" aria-label="Sizing example input"
                                aria-describedby="inputGroup-sizing-default">
                     </div>
@@ -31,69 +31,70 @@
         </div>
         <p v-if="userGrinder&&recipeGrinder&&recipeGrindNumber&&recipeGrinderMode">
             {{ recipeGrindNumber }} clicks on {{ recipeGrinder.grinder_producer.name }} {{ recipeGrinder.model }}
-            is considered a {{ recipeGrindGeneral }} grind and it will be around the setting of {{ userGrindMin }} to
-            {{ userGrindMax }} on {{ userGrinder.grinder_producer.name }}
+            is considered a {{ recipeGrindGeneral }} grind and it will be around the setting of <span v-if="recipeGrindGeneral!=='very coarse'">{{ userGrindMin }} to
+            {{ userGrindMax }}</span><span v-else>{{ userGrindMin }}+</span> on {{ userGrinder.grinder_producer.name }}
             {{ userGrinder.model }}.
         </p>
         <p v-if="userGrinder&&!recipeGrinderMode&&selectedGeneralGrindSize">
-            {{ selectedGeneralGrindSize }} is around the setting of {{ userGrindMin }} to {{ userGrindMax }} on
+            {{ selectedGeneralGrindSize }} is around the setting of <span v-if="recipeGrindGeneral!=='very coarse'">{{ userGrindMin }} to
+            {{ userGrindMax }}</span><span v-else>{{ userGrindMin }}+</span> on
             {{ userGrinder.grinder_producer.name }}
             {{ userGrinder.model }}.
         </p>
         <p>Is the grinder you're looking for not on the list? <a @click="showNewGrinderModal = true" href="#">click here</a> to add a new one.</p>
         <p>If you want to request changes to an existing grinder <a href="#">click here</a>.</p>
 
-            <vue-final-modal v-model="showNewGrinderModal" classes="modal-container" content-class="modal-content">
-                <span class="modal__title">Add a new grinder</span>
-                <form @submit="submitNewGrinder">
-                    <div class="mb-3">
-                        <label for="exampleFormControlInput1" class="form-label">Grinder Model</label>
-                        <input type="text" class="form-control" id="exampleFormControlInput1">
-                    </div>
-                    <div class="mb-3">
-                        <label for="grinderProducer" class="form-label">Grinder producer</label>
-                        <v-select v-model="newGrinderForm.producer_id" :options="producers" :reduce="producers => producers.id" label="name"/>
-                    </div>
-                    <div class="mb-3">
-                        <label for="rangeSize" class="form-label">Range between settings</label>
-                        <input type="number" min="1" class="form-control" id="rangeSize" v-model="newGrinderForm.range_size">
-                    </div>
-                    <div class="mb-3">
-                        <label for="veryFine" class="form-label">Very fine setting <span v-if="newGrinderForm.range_size&&newGrinderForm.very_fine">({{newGrinderForm.very_fine}}-{{newGrinderForm.very_fine+newGrinderForm.range_size}})</span></label>
-                        <input type="number" min="1" class="form-control" id="veryFine" v-model="newGrinderForm.very_fine">
-                    </div>
-                    <div class="mb-3">
-                        <label for="fine" class="form-label">Fine setting <span v-if="newGrinderForm.range_size&&newGrinderForm.fine">({{newGrinderForm.fine}}-{{newGrinderForm.fine+newGrinderForm.range_size}})</span></label>
-                        <input type="number" :min="newGrinderForm.very_fine+newGrinderForm.range_size+1" class="form-control" id="veryFine" v-model="newGrinderForm.fine">
-                    </div>
-                    <div class="mb-3">
-                        <label for="medium" class="form-label">Medium setting <span v-if="newGrinderForm.range_size&&newGrinderForm.medium">({{newGrinderForm.medium}}-{{newGrinderForm.medium+newGrinderForm.range_size}})</span></label>
-                        <input type="number" :min="newGrinderForm.fine+newGrinderForm.range_size+1" class="form-control" id="medium" v-model="newGrinderForm.medium">
-                    </div>
-                    <div class="mb-3">
-                        <label for="mediumCoarse" class="form-label">Medium coarse setting <span v-if="newGrinderForm.range_size&&newGrinderForm.medium_coarse">({{newGrinderForm.medium_coarse}}-{{newGrinderForm.medium_coarse+newGrinderForm.range_size}})</span></label>
-                        <input type="number" :min="newGrinderForm.medium+newGrinderForm.range_size+1" class="form-control" id="mediumCoarse" v-model="newGrinderForm.medium_coarse">
-                    </div>
-                    <div class="mb-3">
-                        <label for="coarse" class="form-label">Coarse setting <span v-if="newGrinderForm.range_size&&newGrinderForm.coarse">({{newGrinderForm.coarse}}-{{newGrinderForm.medium_coarse+newGrinderForm.coarse}})</span></label>
-                        <input type="number" :min="newGrinderForm.medium_coarse+newGrinderForm.range_size+1" class="form-control" id="coarse" v-model="newGrinderForm.coarse">
-                    </div>
-                    <div class="mb-3">
-                        <label for="veryCoarse" class="form-label">Very coarse setting <span v-if="newGrinderForm.range_size&&newGrinderForm.very_coarse">({{newGrinderForm.very_coarse}}-{{newGrinderForm.very_coarse+newGrinderForm.range_size}})</span></label>
-                        <input type="number" :min="newGrinderForm.coarse+newGrinderForm.range_size+1" class="form-control" id="veryCoarse" v-model="newGrinderForm.very_coarse">
-                    </div>
-                    <div class="mb-3">
-                        <label for="exampleFormControlTextarea1" class="form-label">Notes (optional)</label>
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                    </div>
+<!--            <vue-final-modal v-model="showNewGrinderModal" classes="modal-container" content-class="modal-content">-->
+<!--                <span class="modal__title">Add a new grinder</span>-->
+<!--                <form @submit="submitNewGrinder">-->
+<!--                    <div class="mb-3">-->
+<!--                        <label for="exampleFormControlInput1" class="form-label">Grinder Model</label>-->
+<!--                        <input type="text" class="form-control" id="exampleFormControlInput1">-->
+<!--                    </div>-->
+<!--                    <div class="mb-3">-->
+<!--                        <label for="grinderProducer" class="form-label">Grinder producer</label>-->
+<!--                        <v-select v-model="newGrinderForm.producer_id" :options="producers" :reduce="producers => producers.id" label="name"/>-->
+<!--                    </div>-->
+<!--                    <div class="mb-3">-->
+<!--                        <label for="rangeSize" class="form-label">Range between settings</label>-->
+<!--                        <input type="number" min="1" class="form-control" id="rangeSize" v-model="newGrinderForm.range_size">-->
+<!--                    </div>-->
+<!--                    <div class="mb-3">-->
+<!--                        <label for="veryFine" class="form-label">Very fine setting <span v-if="newGrinderForm.range_size&&newGrinderForm.very_fine">({{newGrinderForm.very_fine}}-{{newGrinderForm.very_fine+newGrinderForm.range_size}})</span></label>-->
+<!--                        <input type="number" min="1" class="form-control" id="veryFine" v-model="newGrinderForm.very_fine">-->
+<!--                    </div>-->
+<!--                    <div class="mb-3">-->
+<!--                        <label for="fine" class="form-label">Fine setting <span v-if="newGrinderForm.range_size&&newGrinderForm.fine">({{newGrinderForm.fine}}-{{newGrinderForm.fine+newGrinderForm.range_size}})</span></label>-->
+<!--                        <input type="number" :min="newGrinderForm.very_fine+newGrinderForm.range_size+1" class="form-control" id="veryFine" v-model="newGrinderForm.fine">-->
+<!--                    </div>-->
+<!--                    <div class="mb-3">-->
+<!--                        <label for="medium" class="form-label">Medium setting <span v-if="newGrinderForm.range_size&&newGrinderForm.medium">({{newGrinderForm.medium}}-{{newGrinderForm.medium+newGrinderForm.range_size}})</span></label>-->
+<!--                        <input type="number" :min="newGrinderForm.fine+newGrinderForm.range_size+1" class="form-control" id="medium" v-model="newGrinderForm.medium">-->
+<!--                    </div>-->
+<!--                    <div class="mb-3">-->
+<!--                        <label for="mediumCoarse" class="form-label">Medium coarse setting <span v-if="newGrinderForm.range_size&&newGrinderForm.medium_coarse">({{newGrinderForm.medium_coarse}}-{{newGrinderForm.medium_coarse+newGrinderForm.range_size}})</span></label>-->
+<!--                        <input type="number" :min="newGrinderForm.medium+newGrinderForm.range_size+1" class="form-control" id="mediumCoarse" v-model="newGrinderForm.medium_coarse">-->
+<!--                    </div>-->
+<!--                    <div class="mb-3">-->
+<!--                        <label for="coarse" class="form-label">Coarse setting <span v-if="newGrinderForm.range_size&&newGrinderForm.coarse">({{newGrinderForm.coarse}}-{{newGrinderForm.medium_coarse+newGrinderForm.coarse}})</span></label>-->
+<!--                        <input type="number" :min="newGrinderForm.medium_coarse+newGrinderForm.range_size+1" class="form-control" id="coarse" v-model="newGrinderForm.coarse">-->
+<!--                    </div>-->
+<!--                    <div class="mb-3">-->
+<!--                        <label for="veryCoarse" class="form-label">Very coarse setting <span v-if="newGrinderForm.range_size&&newGrinderForm.very_coarse">({{newGrinderForm.very_coarse}}-{{newGrinderForm.very_coarse+newGrinderForm.range_size}})</span></label>-->
+<!--                        <input type="number" :min="newGrinderForm.coarse+newGrinderForm.range_size+1" class="form-control" id="veryCoarse" v-model="newGrinderForm.very_coarse">-->
+<!--                    </div>-->
+<!--                    <div class="mb-3">-->
+<!--                        <label for="exampleFormControlTextarea1" class="form-label">Notes (optional)</label>-->
+<!--                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>-->
+<!--                    </div>-->
 
-                    <button
-                        @click.prevent="submitNewGrinder()"
-                        class="btn btn-primary mx-2">
-                        Submit
-                    </button>
-                </form>
-            </vue-final-modal>
+<!--                    <button-->
+<!--                        @click.prevent="submitNewGrinder()"-->
+<!--                        class="btn btn-primary mx-2">-->
+<!--                        Submit-->
+<!--                    </button>-->
+<!--                </form>-->
+<!--            </vue-final-modal>-->
 
     </div>
 </template>
@@ -123,7 +124,6 @@ export default {
             newGrinderForm: new Form({
                 model: null,
                 producer_id: null,
-                range_size: null,
                 very_fine: null,
                 fine: null,
                 medium: null,
@@ -144,35 +144,29 @@ export default {
             this.selectedGeneralGrindSize = null;
         }
         if ((this.recipeGrinder && this.recipeGrindNumber != null) || this.selectedGeneralGrindSize) {
-            if (this.selectedGeneralGrindSize === 'very fine' || (this.recipeGrinder && this.recipeGrindNumber < this.recipeGrinder.very_fine + this.recipeGrinder.range_size)) {
+            if (this.selectedGeneralGrindSize === 'very fine' || (this.recipeGrinder && this.recipeGrindNumber < this.recipeGrinder.very_fine_max)) {
                 this.recipeGrindGeneral = 'very fine';
-                this.userGrindMin = this.userGrinder.very_fine;
-                this.userGrindMax = this.userGrinder.very_fine + this.userGrinder.range_size;
-            } else if (!this.recipeGrinder && this.selectedGeneralGrindSize === 'fine' || (this.recipeGrinder && this.recipeGrindNumber < this.recipeGrinder.fine + this.recipeGrinder.range_size)) {
+                this.userGrindMin = this.userGrinder.very_fine_min;
+                this.userGrindMax = this.userGrinder.very_fine_max;
+            } else if (!this.recipeGrinder && this.selectedGeneralGrindSize === 'fine' || (this.recipeGrinder && this.recipeGrindNumber < this.recipeGrinder.fine_max)) {
                 this.recipeGrindGeneral = 'fine';
-                this.userGrindMin = this.userGrinder.fine;
-                this.userGrindMax = this.userGrinder.fine + this.userGrinder.range_size;
-            } else if (this.selectedGeneralGrindSize === 'medium' || (this.recipeGrinder && this.recipeGrindNumber < this.recipeGrinder.medium + this.recipeGrinder.range_size)) {
+                this.userGrindMin = this.userGrinder.fine_min;
+                this.userGrindMax = this.userGrinder.fine_max;
+            } else if (this.selectedGeneralGrindSize === 'medium' || (this.recipeGrinder && this.recipeGrindNumber < this.recipeGrinder.medium_max)) {
                 this.recipeGrindGeneral = 'medium';
-                this.userGrindMin = this.userGrinder.medium;
-                this.userGrindMax = this.userGrinder.medium + this.userGrinder.range_size;
-            } else if (this.selectedGeneralGrindSize === 'medium coarse' || (this.recipeGrinder && this.recipeGrindNumber < this.recipeGrinder.medium_coarse + this.recipeGrinder.range_size)) {
+                this.userGrindMin = this.userGrinder.medium_min;
+                this.userGrindMax = this.userGrinder.medium_max;
+            } else if (this.selectedGeneralGrindSize === 'medium coarse' || (this.recipeGrinder && this.recipeGrindNumber < this.recipeGrinder.medium_coarse_max)) {
                 this.recipeGrindGeneral = 'medium coarse';
-                this.userGrindMin = this.userGrinder.medium_coarse;
-                this.userGrindMax = this.userGrinder.medium_coarse + this.userGrinder.range_size;
-            } else if (this.selectedGeneralGrindSize === 'coarse' || (this.recipeGrinder && this.recipeGrindNumber < this.recipeGrinder.coarse + this.recipeGrinder.range_size)) {
+                this.userGrindMin = this.userGrinder.medium_coarse_min;
+                this.userGrindMax = this.userGrinder.medium_coarse_max;
+            } else if (this.selectedGeneralGrindSize === 'coarse' || (this.recipeGrinder && this.recipeGrindNumber < this.recipeGrinder.coarse_max)) {
                 this.recipeGrindGeneral = 'coarse';
-                this.userGrindMin = this.userGrinder.coarse;
-                this.userGrindMax = this.userGrinder.coarse + this.userGrinder.range_size;
-            } else if (this.selectedGeneralGrindSize === 'very coarse' || (this.recipeGrinder && this.recipeGrindNumber < this.recipeGrinder.very_coarse + this.recipeGrinder.range_size)) {
+                this.userGrindMin = this.userGrinder.coarse_min;
+                this.userGrindMax = this.userGrinder.coarse_max;
+            } else if (this.selectedGeneralGrindSize === 'very coarse' || (this.recipeGrinder && this.recipeGrindNumber > this.recipeGrinder.very_coarse_min)) {
                 this.recipeGrindGeneral = 'very coarse';
-                this.userGrindMin = this.userGrinder.very_coarse;
-                this.userGrindMax = this.userGrinder.very_coarse + this.userGrinder.range_size;
-            } else if (this.recipeGrindNumber > this.recipeGrinder.very_coarse + this.recipeGrinder.range_size) {
-                // this.recipeGrindNumber = this.recipeGrinder.very_coarse + this.recipeGrinder.range_size;
-                this.recipeGrindGeneral = 'very coarse';
-                this.userGrindMin = this.userGrinder.very_coarse;
-                this.userGrindMax = this.userGrinder.very_coarse + this.userGrinder.range_size;
+                this.userGrindMin = this.userGrinder.very_coarse_min;
             }
         }
 
