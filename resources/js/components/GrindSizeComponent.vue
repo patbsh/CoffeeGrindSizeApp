@@ -302,10 +302,9 @@ export default {
     position: relative;
     display: flex;
     flex-direction: column;
-    /*max-height: 80%;*/
     /*margin: 0 5rem;*/
     max-width: 500px;
-    max-height: 1000px;
+    max-height: 90%;
     padding: 1rem;
     background: #fff;
     overflow-y: auto;
