@@ -25,7 +25,8 @@ class StoreGrinderRequest extends FormRequest
     {
         return [
             'model' => ['string', 'unique:grinders,model'],
-            'grinder_producer_id' => ['integer', 'exists:grinder_producers,id'],
+            'grinder_producer_id' => ['integer', 'exists:grinder_producers,id', 'nullable'],
+            'producer_name' => ['string', 'nullable'],
             'notes' => ['nullable'],
             'very_fine_min' => ['numeric'],
             'very_fine_max' => ['numeric'],
