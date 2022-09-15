@@ -44,11 +44,11 @@
         </p>
         <p>Is the grinder you're looking for not on the list? <a @click="showNewGrinderModal = true" href="#">click
             here</a> to add a new one.</p>
-        <p>If you want to request changes to an existing grinder <a href="#">click here</a>.</p>
+        <p>If you want to request changes to an existing grinder <a @click="showReportModal = true" href="#">click here</a>.</p>
 
         <vue-final-modal v-model="showNewGrinderModal" classes="modal-container" content-class="modal-content">
             <span class="modal__title">Add a new grinder</span>
-            <span class="text-success" v-if="message" v-text="message"></span>
+            <span class="text-success" v-if="newGrinderFormMessage" v-text="newGrinderFormMessage"></span>
             <form @submit="submitNewGrinder" @keydown="newGrinderForm.errors.clear($event.target.name)">
                 <div class="row">
                     <div class="col-6">
@@ -82,7 +82,7 @@
                 </div>
                 <div class="row">
                     <div class="col-6">
-                        <label for="veryFine" class="form-label">Very fine setting</label>
+                        <label for="veryFine" class="form-label">Very fine setting (optional)</label>
                         <div class="input-group mb-3">
                             <input type="number" class="form-control text-center w-25" min="1"
                                    v-model="newGrinderForm.very_fine_min">
@@ -168,11 +168,38 @@
                 </div>
                 <div class="mb-3">
                     <label for="exampleFormControlTextarea1" class="form-label">Notes (optional)</label>
-                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" v-model="newGrinderForm.notes">
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+                              v-model="newGrinderForm.notes">
                     </textarea>
                 </div>
                 <button
                     @click.prevent="submitNewGrinder()"
+                    class="btn btn-primary mx-2">
+                    Submit
+                </button>
+            </form>
+        </vue-final-modal>
+        <vue-final-modal v-model="showReportModal" classes="modal-container" content-class="modal-content">
+            <span class="modal__title">Submit a new grinder report</span>
+            <span class="text-success" v-if="reportFormMessage" v-text="reportFormMessage"></span>
+            <form @submit="submitNewReport" @keydown="reportForm.errors.clear($event.target.name)">
+                <div class="my-3">
+                    <label>Select the grinder you want to report</label>
+                    <v-select label="item_data" :options="grinders"
+                              :reduce="grinders => grinders.id" v-model="reportForm.grinder_id"/>
+                    <span class="text-danger" v-if="reportForm.errors.has('grinder_id')"
+                          v-text="reportForm.errors.get('grinder_id')"></span>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">What do you want to report?</label>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+                              v-model="reportForm.report">
+                    </textarea>
+                    <span class="text-danger" v-if="reportForm.errors.has('report')"
+                          v-text="reportForm.errors.get('report')"></span>
+                </div>
+                <button
+                    @click.prevent="submitNewReport()"
                     class="btn btn-primary mx-2">
                     Submit
                 </button>
@@ -191,7 +218,6 @@ export default {
     props: ["grinders", "producers"],
     data() {
         return {
-            message: '',
             userGrinder: null,
             newProducerSwitch: false,
             userGrindMin: null,
@@ -203,6 +229,7 @@ export default {
             generalGrindSizes: ['very fine', 'fine', 'medium', 'medium coarse', 'coarse', 'very coarse'],
             selectedGeneralGrindSize: null,
             showNewGrinderModal: false,
+            showReportModal: false,
             newGrinderForm: new Form({
                 model: null,
                 producer_id: null,
@@ -220,6 +247,12 @@ export default {
                 very_coarse_min: null,
                 notes: null,
             }),
+            newGrinderFormMessage: null,
+            reportForm: new Form({
+                report: null,
+                grinder_id: null
+            }),
+            reportFormMessage: null,
         }
     },
     mounted() {
@@ -231,7 +264,7 @@ export default {
         if (this.recipeGrinderMode) {
             this.selectedGeneralGrindSize = null;
         }
-        if ((this.recipeGrinder && this.recipeGrindNumber != null) || this.selectedGeneralGrindSize) {
+        if (this.userGrinder && ((this.recipeGrinder && this.recipeGrindNumber != null) || this.selectedGeneralGrindSize)) {
             if (this.selectedGeneralGrindSize === 'very fine' || (this.recipeGrinder && this.recipeGrindNumber < this.recipeGrinder.very_fine_max)) {
                 this.recipeGrindGeneral = 'very fine';
                 this.userGrindMin = this.userGrinder.very_fine_min;
@@ -261,7 +294,7 @@ export default {
     computed: {},
     methods: {
         submitNewGrinder() {
-            this.message = '';
+            this.newGrinderFormMessage = null;
             axios.post('/grinder',
                 {
                     model: this.newGrinderForm.model,
@@ -281,10 +314,23 @@ export default {
                     very_coarse_min: this.newGrinderForm.very_coarse_min,
                 })
                 .then((response) => {
-                    this.message = response.data.message;
+                    this.newGrinderFormMessage = response.data.message;
                     this.newGrinderForm.reset();
                 })
                 .catch(error => this.newGrinderForm.errors.record(error.response.data));
+        },
+        submitNewReport() {
+            this.reportFormMessage = null;
+            axios.post('/grinder-report',
+                {
+                    report: this.reportForm.report,
+                    grinder_id: this.reportForm.grinder_id,
+                })
+                .then((response) => {
+                    this.reportFormMessage = response.data.message;
+                    this.reportForm.reset();
+                })
+                .catch(error => this.reportForm.errors.record(error.response.data));
         }
     },
 }
