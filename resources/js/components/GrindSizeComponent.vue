@@ -46,18 +46,22 @@
 
             <vue-final-modal v-model="showNewGrinderModal" classes="modal-container" content-class="modal-content">
                 <span class="modal__title">Add a new grinder</span>
-                <form @submit="submitNewGrinder">
+                <form @submit="submitNewGrinder" @keydown="newGrinderForm.errors.clear($event.target.name)">
                     <div class="row">
                         <div class="col-6">
                             <div class="mb-3">
                                 <label for="exampleFormControlInput1" class="form-label">Grinder Model</label>
                                 <input type="text" class="form-control" id="exampleFormControlInput1" v-model="newGrinderForm.model">
+                                <span class="text-danger" v-if="newGrinderForm.errors.has('model')"
+                                      v-text="newGrinderForm.errors.get('model')"></span>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="mb-3">
                                 <label for="grinderProducer" class="form-label">Grinder producer</label>
                                 <v-select v-model="newGrinderForm.producer_id" :options="producers" :reduce="producers => producers.id" label="name"/>
+                                <span class="text-danger" v-if="newGrinderForm.errors.has('grinder_producer_id')"
+                                      v-text="newGrinderForm.errors.get('grinder_producer_id')"></span>
                             </div>
                         </div>
                     </div>
@@ -68,6 +72,10 @@
                                 <input type="number" class="form-control" min="1" v-model="newGrinderForm.very_fine_min">
                                 <span class="input-group-text">to</span>
                                 <input type="number" class="form-control" :min="newGrinderForm.very_fine_min+1" v-model="newGrinderForm.very_fine_max">
+                                <span class="text-danger" v-if="newGrinderForm.errors.has('very_fine_min')"
+                                      v-text="newGrinderForm.errors.get('very_fine_min')"></span>
+                                <span class="text-danger" v-if="newGrinderForm.errors.has('very_fine_max')"
+                                      v-text="newGrinderForm.errors.get('very_fine_max')"></span>
                             </div>
                         </div>
                         <div class="col-6">
@@ -76,6 +84,10 @@
                                 <input type="number" class="form-control" :min="newGrinderForm.very_fine_max+1" v-model="newGrinderForm.fine_min">
                                 <span class="input-group-text">to</span>
                                 <input type="number" class="form-control" :min="newGrinderForm.fine_min+1" v-model="newGrinderForm.fine_max">
+                                <span class="text-danger" v-if="newGrinderForm.errors.has('fine_min')"
+                                      v-text="newGrinderForm.errors.get('fine_min')"></span>
+                                <span class="text-danger" v-if="newGrinderForm.errors.has('fine_max')"
+                                      v-text="newGrinderForm.errors.get('fine_max')"></span>
                             </div>
                         </div>
                     </div>
@@ -86,6 +98,10 @@
                                 <input type="number" class="form-control" :min="newGrinderForm.fine_max+1" v-model="newGrinderForm.medium_min">
                                 <span class="input-group-text">to</span>
                                 <input type="number" class="form-control" :min="newGrinderForm.medium_min+1" v-model="newGrinderForm.medium_max">
+                                <span class="text-danger" v-if="newGrinderForm.errors.has('medium_min')"
+                                      v-text="newGrinderForm.errors.get('medium_min')"></span>
+                                <span class="text-danger" v-if="newGrinderForm.errors.has('medium_max')"
+                                      v-text="newGrinderForm.errors.get('medium_max')"></span>
                             </div>
                         </div>
                         <div class="col-6">
@@ -94,6 +110,10 @@
                                 <input type="number" class="form-control" :min="newGrinderForm.medium_max+1" v-model="newGrinderForm.medium_coarse_min">
                                 <span class="input-group-text">to</span>
                                 <input type="number" class="form-control" :min="newGrinderForm.medium_coarse_min+1" v-model="newGrinderForm.medium_coarse_max">
+                                <span class="text-danger" v-if="newGrinderForm.errors.has('medium_coarse_min')"
+                                      v-text="newGrinderForm.errors.get('medium_coarse_min')"></span>
+                                <span class="text-danger" v-if="newGrinderForm.errors.has('medium_coarse_max')"
+                                      v-text="newGrinderForm.errors.get('medium_coarse_max')"></span>
                             </div>
                         </div>
                     </div>
@@ -104,6 +124,10 @@
                                 <input type="number" class="form-control" :min="newGrinderForm.medium_coarse_max+1" v-model="newGrinderForm.coarse_min">
                                 <span class="input-group-text">to</span>
                                 <input type="number" class="form-control" :min="newGrinderForm.coarse_min+1" v-model="newGrinderForm.coarse_max">
+                                <span class="text-danger" v-if="newGrinderForm.errors.has('coarse_min')"
+                                      v-text="newGrinderForm.errors.get('coarse_min')"></span>
+                                <span class="text-danger" v-if="newGrinderForm.errors.has('coarse_max')"
+                                      v-text="newGrinderForm.errors.get('coarse_max')"></span>
                             </div>
                         </div>
                         <div class="col-6">
@@ -111,6 +135,8 @@
                             <div class="input-group mb-3">
                                 <span class="input-group-text">from</span>
                                 <input type="number" class="form-control" :min="newGrinderForm.coarse_max+1" v-model="newGrinderForm.very_coarse_min">
+                                <span class="text-danger" v-if="newGrinderForm.errors.has('very_coarse_min')"
+                                      v-text="newGrinderForm.errors.get('very_coarse_min')"></span>
                             </div>
                         </div>
                     </div>
@@ -234,7 +260,7 @@ export default {
                 .then((response) => {
                     this.message = response.data.message;
                 })
-                .catch(error => this.form.errors.record(error.response.data));
+                .catch(error => this.newGrinderForm.errors.record(error.response.data));
         }
     },
 }
