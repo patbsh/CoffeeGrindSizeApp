@@ -12,7 +12,7 @@
                         </div>
                     @endif
                 </div>
-                <grind-size-component :grinders="{{$grinders}}"></grind-size-component>
+                <grind-size-component :grinders="{{$grinders}}" :producers="{{$producers}}"></grind-size-component>
             </div>
         </div>
     </div>

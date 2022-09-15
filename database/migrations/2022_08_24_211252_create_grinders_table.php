@@ -15,13 +15,17 @@ return new class extends Migration {
         Schema::create('grinders', function (Blueprint $table) {
             $table->id();
             $table->string('model');
-            $table->integer('range_size')->default(2);
-            $table->integer('very_fine')->nullable();
-            $table->integer('fine');
-            $table->integer('medium');
-            $table->integer('medium_coarse');
-            $table->integer('coarse');
-            $table->integer('very_coarse');
+            $table->integer('very_fine_min')->nullable();
+            $table->integer('very_fine_max')->nullable();
+            $table->integer('fine_min');
+            $table->integer('fine_max');
+            $table->integer('medium_min');
+            $table->integer('medium_max');
+            $table->integer('medium_coarse_min');
+            $table->integer('medium_coarse_max');
+            $table->integer('coarse_min');
+            $table->integer('coarse_max');
+            $table->integer('very_coarse_min');
             $table->string('notes')->nullable();
             $table->boolean('is_verified')->default(0);
             $table->boolean('can_espresso')->default(0);
