@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Grinder extends Model
 {
     use HasFactory;
+    protected $guarded = [];
 
     public function grinder_producer(): BelongsTo
     {

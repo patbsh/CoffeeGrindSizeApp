@@ -24,7 +24,20 @@ class StoreGrinderRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'model' => ['string', 'unique:grinders,model'],
+            'grinder_producer_id' => ['integer', 'exists:grinder_producers,id'],
+            'notes' => ['nullable'],
+            'very_fine_min' => ['numeric'],
+            'very_fine_max' => ['numeric'],
+            'fine_min' => ['numeric'],
+            'fine_max' => ['numeric'],
+            'medium_min' => ['numeric'],
+            'medium_max' => ['numeric'],
+            'medium_coarse_min' => ['numeric'],
+            'medium_coarse_max' => ['numeric'],
+            'coarse_min' => ['numeric'],
+            'coarse_max' => ['numeric'],
+            'very_coarse_min' => ['numeric'],
         ];
     }
 }
