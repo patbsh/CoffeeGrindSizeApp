@@ -9,6 +9,10 @@ use Illuminate\Http\JsonResponse;
 
 class GrinderController extends Controller
 {
+    public function index()
+    {
+     return view('grinders.index')->with('grinders', cache('grinders-list'));
+    }
     public function store(StoreGrinderRequest $request): JsonResponse
     {
         $data = $request->validated();

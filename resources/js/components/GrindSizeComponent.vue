@@ -295,7 +295,7 @@ export default {
     methods: {
         submitNewGrinder() {
             this.newGrinderFormMessage = null;
-            axios.post('/grinder',
+            axios.post('/grinders',
                 {
                     model: this.newGrinderForm.model,
                     grinder_producer_id: this.newGrinderForm.producer_id,
@@ -321,7 +321,7 @@ export default {
         },
         submitNewReport() {
             this.reportFormMessage = null;
-            axios.post('/grinder-report',
+            axios.post('/grinder-reports',
                 {
                     report: this.reportForm.report,
                     grinder_id: this.reportForm.grinder_id,
