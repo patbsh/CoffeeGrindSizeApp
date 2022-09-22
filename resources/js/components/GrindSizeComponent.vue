@@ -6,12 +6,12 @@
                    v-model="recipeGrinderMode">
             <label for="flexSwitchCheckDefault">Recipe uses a specific grinder</label>
         </div>
-        <div class="row">
-            <div class="col-6">
+        <div class="row d-flex justify-content-around">
+            <div class="col-5">
                 <label>Your grinder</label>
                 <v-select label="item_data" :options="grinders" v-model="userGrinder"/>
             </div>
-            <div class="col-6">
+            <div class="col-5">
                 <div v-if="recipeGrinderMode">
                     <label>Recipe grinder</label>
                     <v-select class="mb-2" label="item_data" :options="grinders" v-model="recipeGrinder"/>

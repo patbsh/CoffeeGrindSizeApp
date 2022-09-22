@@ -15,14 +15,15 @@
                         <td>{{ $grinder->model }}</td>
                         <td>{{ $grinder->grinder_producer->name }}</td>
                         <td>
-                            <button class="btn btn-primary">
+                            <a href="{{ route('grinders.show', $grinder) }}" class="btn btn-primary">
                                 show
-                            </button>
+                            </a>
                         </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
+        {{ $grinders->links() }}
     </div>
 
 @endsection

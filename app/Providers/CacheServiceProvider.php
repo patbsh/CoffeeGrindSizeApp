@@ -42,9 +42,5 @@ class CacheServiceProvider extends ServiceProvider
                 })
             );
         });
-
-        cache()->remember('grinders-list', config('cache.default_cache_time'), function () {
-            return  Grinder::with(['grinder_producer'])->where('is_verified', '=', 1)->get();
-        });
     }
 }

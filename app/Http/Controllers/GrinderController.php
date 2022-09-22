@@ -11,8 +11,11 @@ class GrinderController extends Controller
 {
     public function index()
     {
-     return view('grinders.index')->with('grinders', cache('grinders-list'));
+        $grinders = Grinder::with(['grinder_producer'])->where('is_verified', '=', 1)->paginate(15);
+
+        return view('grinders.index')->with('grinders', $grinders);
     }
+
     public function store(StoreGrinderRequest $request): JsonResponse
     {
         $data = $request->validated();
@@ -43,5 +46,13 @@ class GrinderController extends Controller
         } else {
             return response()->json(['message' => 'Something went wrong.']);
         }
+    }
+
+    public function show(Grinder $grinder)
+    {
+         $producer = $grinder->grinder_producer->name;
+        return view('grinders.show')
+            ->with('grinder', $grinder)
+            ->with('producer', $producer);
     }
 }
