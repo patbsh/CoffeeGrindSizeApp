@@ -41,9 +41,10 @@
                         </p>
                     </div>
 
-                    <a href="/grinders" class="btn btn-primary">Go back to the list</a>
+                    <a href="/grinders" class="btn btn-primary mx-2">Go back to the list</a>
+                    <a @click="showReportModal = true" class="btn btn-primary mx-2">Request changes to the grinder</a>
                 </div>
-
+                <grinder-report-form-component v-model="showReportModal" :grinder="grinder"></grinder-report-form-component>
             </div>
         </div>
     </div>
@@ -54,7 +55,9 @@ export default {
     components: {},
     props: ['grinder', 'producer'],
     data() {
-        return {}
+        return {
+            showReportModal: false,
+        }
     },
     mounted() {
     },

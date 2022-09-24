@@ -3,7 +3,7 @@
         <span class="modal__title">Submit a new grinder report</span>
         <span class="text-success" v-if="reportFormMessage" v-text="reportFormMessage"></span>
         <form @submit="submitNewReport" @keydown="reportForm.errors.clear($event.target.name)">
-            <div class="my-3">
+            <div class="my-3" v-if="grinders">
                 <label>Select the grinder you want to report</label>
                 <v-select label="item_data" :options="grinders"
                           :reduce="grinders => grinders.id" v-model="reportForm.grinder_id"/>
@@ -33,7 +33,7 @@ import {ModalsContainer, VueFinalModal} from "vue-final-modal";
 
 export default {
     components: {vSelect, VueFinalModal, ModalsContainer},
-    props: ["grinders"],
+    props: ["grinders","grinder"],
     data() {
         return {
             reportForm: new Form({
@@ -54,7 +54,7 @@ export default {
             axios.post('/grinder-reports',
                 {
                     report: this.reportForm.report,
-                    grinder_id: this.reportForm.grinder_id,
+                    grinder_id: this.reportForm.grinder_id ?? this.grinder.id,
                 })
                 .then((response) => {
                     this.reportFormMessage = response.data.message;
