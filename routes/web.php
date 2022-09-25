@@ -23,7 +23,8 @@ Route::get('/test', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::resource('grinder', \App\Http\Controllers\GrinderController::class)->only('store');
-Route::resource('grinder-report', \App\Http\Controllers\GrinderReportController::class)->only('store');
+Route::resource('grinders', \App\Http\Controllers\GrinderController::class)
+    ->only('index', 'store', 'show');
+Route::resource('grinder-reports', \App\Http\Controllers\GrinderReportController::class)->only('store');
 
 
