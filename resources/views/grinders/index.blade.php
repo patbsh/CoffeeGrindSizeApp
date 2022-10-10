@@ -23,7 +23,7 @@
                 @endforeach
             </tbody>
         </table>
-        {{ $grinders->links() }}
+{{--        {{ $grinders->links() }}--}}
     </div>
 
 @endsection
