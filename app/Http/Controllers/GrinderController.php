@@ -11,7 +11,9 @@ class GrinderController extends Controller
 {
     public function index()
     {
-        $grinders = Grinder::with(['grinder_producer'])->where('is_verified', '=', 1)->get();
+        (isset(auth()->user()->id) && auth()->user()->hasRole('Admin'))
+            ? $grinders = Grinder::with(['grinder_producer:id,name'])->get()
+            : $grinders = Grinder::with(['grinder_producer:id,name'])->where('is_verified', '=', 1)->get();
 
         return view('grinders.index')->with('grinders', $grinders);
     }
@@ -50,7 +52,7 @@ class GrinderController extends Controller
 
     public function show(Grinder $grinder)
     {
-         $producer = $grinder->grinder_producer->name;
+        $producer = $grinder->grinder_producer->name;
         return view('grinders.show')
             ->with('grinder', $grinder)
             ->with('producer', $producer);

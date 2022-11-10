@@ -8,6 +8,9 @@
             <th class="text-left">
                 Grinder model
             </th>
+            <th v-if="this.is_admin" class="text-left">
+                Is verified
+            </th>
             <th class="text-left">
                 Details
             </th>
@@ -23,6 +26,9 @@
             </td>
             <td>
                 {{ grinder.model }}
+            </td>
+            <td v-if="this.is_admin">
+                {{ grinder.is_verified }}
             </td>
             <td>
                 <v-btn
@@ -40,7 +46,7 @@
 <script>
 export default {
     components: {},
-    props: ["grinders","grinder_link"],
+    props: ["grinders","grinder_link","is_admin"],
     data() {
         return {
         }
