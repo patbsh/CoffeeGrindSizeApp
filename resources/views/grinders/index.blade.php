@@ -23,7 +23,9 @@
                 @endforeach
             </tbody>
         </table>
-        {{ $grinders->links() }}
+{{--        {{ $grinders->links() }}--}}
+{{--        @dd($grinders)--}}
+        <grinders-data-table-component :grinders="{{$grinders}}"></grinders-data-table-component>
     </div>
 
 @endsection
