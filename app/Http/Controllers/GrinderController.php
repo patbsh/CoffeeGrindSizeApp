@@ -11,7 +11,7 @@ class GrinderController extends Controller
 {
     public function index()
     {
-        $grinders = Grinder::with(['grinder_producer'])->where('is_verified', '=', 1)->paginate(15);
+        $grinders = Grinder::with(['grinder_producer'])->where('is_verified', '=', 1)->get();
 
         return view('grinders.index')->with('grinders', $grinders);
     }

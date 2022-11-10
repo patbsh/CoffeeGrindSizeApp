@@ -19,6 +19,7 @@
         "vue": "^3.2.36",
         "vue-final-modal": "^3.4.4",
         "vue-loader": "^17.0.0",
-        "vue-select": "^4.0.0-beta.5"
+        "vue-select": "^4.0.0-beta.5",
+        "vuetify": "^3.0.0"
     }
 }
