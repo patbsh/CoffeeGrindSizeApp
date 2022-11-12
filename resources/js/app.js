@@ -11,6 +11,7 @@ import GrinderReportFormComponent from './components/GrinderReportFormComponent.
 import NewGrinderFormComponent from './components/NewGrinderFormComponent.vue';
 import GrindersDataTableComponent from './components/GrindersDataTableComponent.vue';
 import ProducersDataTableComponent from './components/ProducersDataTableComponent.vue';
+import GrinderReportsDataTableComponent from './components/GrinderReportsDataTableComponent.vue';
 
 // Vuetify
 import 'vuetify/styles';
@@ -32,5 +33,6 @@ app.component('grinder-report-form-component', GrinderReportFormComponent);
 app.component('new-grinder-form-component', NewGrinderFormComponent);
 app.component('grinders-data-table-component', GrindersDataTableComponent);
 app.component('producers-data-table-component', ProducersDataTableComponent);
+app.component('grinder-reports-data-table-component', GrinderReportsDataTableComponent);
 
 app.use(vuetify).mount("#app");

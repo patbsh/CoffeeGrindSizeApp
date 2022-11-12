@@ -21,4 +21,5 @@ class Grinder extends Model
     {
         return $this->hasMany(GrinderReport::class, 'grinder_id', 'id');
     }
+
 }

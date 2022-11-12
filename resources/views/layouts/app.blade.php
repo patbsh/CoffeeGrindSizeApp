@@ -40,6 +40,11 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('producers.index') }}">{{ __('Producers') }}</a>
                         </li>
+                        @role('Admin')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('grinder-reports.index') }}">{{ __('Reports') }}</a>
+                        </li>
+                        @endrole
                     </ul>
 
                     <!-- Right Side Of Navbar -->

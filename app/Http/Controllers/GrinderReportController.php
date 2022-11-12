@@ -11,9 +11,9 @@ class GrinderReportController extends Controller
 {
     public function index()
     {
-        $reports = GrinderReport::all();
-        return $reports;
-        return view('grinder-reports.index', 'reports', $reports);
+        $reports = GrinderReport::with(['grinder:id,model'])->get();
+
+        return view('grinder-reports.index')->with('reports', $reports);
     }
 
     public function store(StoreGrinderReportRequest $request): JsonResponse
