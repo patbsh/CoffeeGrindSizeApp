@@ -13,7 +13,7 @@ class GrinderController extends Controller
     {
         (isset(auth()->user()->id) && auth()->user()->hasRole('Admin'))
             ? $grinders = Grinder::with(['grinder_producer:id,name'])->get()
-            : $grinders = Grinder::with(['grinder_producer:id,name'])->where('is_verified', '=', 1)->get();
+            : $grinders = Grinder::with(['grinder_producer:id,name'])->where('is_verified', 1)->get();
 
         return view('grinders.index')->with('grinders', $grinders);
     }
@@ -21,6 +21,7 @@ class GrinderController extends Controller
     public function store(StoreGrinderRequest $request): JsonResponse
     {
         $data = $request->validated();
+
         if (isset($data['grinder_producer_id'])) {
             unset($data['producer_name']);
             Grinder::create($data);

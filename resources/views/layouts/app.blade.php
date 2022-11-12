@@ -37,6 +37,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('grinders.index') }}">{{ __('Grinders') }}</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('producers.index') }}">{{ __('Producers') }}</a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
