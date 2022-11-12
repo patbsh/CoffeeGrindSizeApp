@@ -32,7 +32,7 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('home') }}">{{ __('Home') }}</a>
+                            <a class="nav-link" href="{{ route('home') }}">{{ __('Grind Size') }}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('grinders.index') }}">{{ __('Grinders') }}</a>

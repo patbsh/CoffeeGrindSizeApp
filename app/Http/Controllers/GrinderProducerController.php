@@ -15,4 +15,10 @@ class GrinderProducerController extends Controller
 
         return view('producers.index')->with('producers', $producers);
     }
+
+    public function show(GrinderProducer $producer)
+    {
+        return view('producers.show')
+            ->with('producer', $producer);
+    }
 }
