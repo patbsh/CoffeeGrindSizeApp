@@ -9,6 +9,12 @@ use Illuminate\Http\Request;
 
 class GrinderReportController extends Controller
 {
+    public function index()
+    {
+        $reports = GrinderReport::all();
+        return $reports;
+        return view('grinder-reports.index', 'reports', $reports);
+    }
 
     public function store(StoreGrinderReportRequest $request): JsonResponse
     {
