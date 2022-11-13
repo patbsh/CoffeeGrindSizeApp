@@ -16,6 +16,11 @@ class GrinderReportController extends Controller
         return view('grinder-reports.index')->with('reports', $reports);
     }
 
+    public function show(GrinderReport $grinderReport)
+    {
+        return view('grinder-reports.show')->with('report', $grinderReport);
+    }
+
     public function store(StoreGrinderReportRequest $request): JsonResponse
     {
         $data = $request->validated();
