@@ -6,8 +6,13 @@
                     <h1 class="h5">{{ producer.name }}</h1>
                 </div>
                 <div class="card-body">
-
-                    <a href="/producers" class="btn btn-primary mx-2">Go back to the list</a>
+                    <v-btn
+                        color="primary"
+                        rounder="lg"
+                        href="/producers"
+                        class="mx-2">
+                        Go back to the list
+                    </v-btn>
                 </div>
             </div>
         </div>

@@ -40,9 +40,20 @@
                             {{ grinder.notes }}
                         </p>
                     </div>
-
-                    <a href="/grinders" class="btn btn-primary mx-2">Go back to the list</a>
-                    <a @click="showReportModal = true" class="btn btn-primary mx-2">Request changes to the grinder</a>
+                    <v-btn
+                        color="primary"
+                        rounder="lg"
+                        href="/grinders"
+                        class="mx-2">
+                        Go back to the list
+                    </v-btn>
+                    <v-btn
+                        color="primary"
+                        rounder="lg"
+                        @click="showReportModal = true"
+                        class="mx-2">
+                        Request changes to the grinder
+                    </v-btn>
                 </div>
                 <grinder-report-form-component v-model="showReportModal" :grinder="grinder"></grinder-report-form-component>
             </div>
