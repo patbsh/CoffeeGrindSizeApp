@@ -32,11 +32,19 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('home') }}">{{ __('Home') }}</a>
+                            <a class="nav-link" href="{{ route('home') }}">{{ __('Grind Size') }}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('grinders.index') }}">{{ __('Grinders') }}</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('producers.index') }}">{{ __('Producers') }}</a>
+                        </li>
+                        @role('Admin')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('grinder-reports.index') }}">{{ __('Reports') }}</a>
+                        </li>
+                        @endrole
                     </ul>
 
                     <!-- Right Side Of Navbar -->

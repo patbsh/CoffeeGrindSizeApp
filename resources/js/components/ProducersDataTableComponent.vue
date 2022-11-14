@@ -3,10 +3,7 @@
         <thead>
         <tr>
             <th class="text-left">
-                Grinder producer
-            </th>
-            <th class="text-left">
-                Grinder model
+                Producer name
             </th>
             <th v-if="this.is_admin" class="text-left">
                 Is verified
@@ -18,23 +15,20 @@
         </thead>
         <tbody>
         <tr
-            v-for="grinder in grinders"
-            :key="grinder.model"
+            v-for="producer in producers"
+            :key="producer.name"
         >
             <td>
-                {{ grinder.grinder_producer.name }}
-            </td>
-            <td>
-                {{ grinder.model }}
+                {{ producer.name }}
             </td>
             <td v-if="this.is_admin">
-                {{ grinder.is_verified }}
+                {{ producer.is_verified }}
             </td>
             <td>
                 <v-btn
                     color="primary"
                     rounder="lg"
-                    :href="this.grinder_link + '/' + grinder.id"
+                    :href="this.producer_link + '/' + producer.id"
                 >
                     Details
                 </v-btn>
@@ -46,7 +40,7 @@
 <script>
 export default {
     components: {},
-    props: ["grinders","grinder_link","is_admin"]
+    props: ["producers","producer_link","is_admin"]
 }
 </script>
 

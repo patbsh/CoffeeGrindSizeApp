@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateGrinderRequest;
 use App\Http\Requests\StoreGrinderRequest;
 use App\Models\Grinder;
 use App\Models\GrinderProducer;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 
 class GrinderController extends Controller
 {
     public function index()
     {
-        $grinders = Grinder::with(['grinder_producer'])->where('is_verified', '=', 1)->get();
+        (isset(auth()->user()->id) && auth()->user()->hasRole('Admin'))
+            ? $grinders = Grinder::with(['grinder_producer:id,name'])->get()
+            : $grinders = Grinder::with(['grinder_producer:id,name'])->where('is_verified', 1)->get();
 
         return view('grinders.index')->with('grinders', $grinders);
     }
@@ -19,6 +23,7 @@ class GrinderController extends Controller
     public function store(StoreGrinderRequest $request): JsonResponse
     {
         $data = $request->validated();
+
         if (isset($data['grinder_producer_id'])) {
             unset($data['producer_name']);
             Grinder::create($data);
@@ -48,11 +53,26 @@ class GrinderController extends Controller
         }
     }
 
+    public function update(UpdateGrinderRequest $request, Grinder $grinder)
+    {
+        $grinder->update($request->validated());
+
+        return response()->json(['message' => 'Done.']);
+
+    }
+
     public function show(Grinder $grinder)
     {
-         $producer = $grinder->grinder_producer->name;
         return view('grinders.show')
             ->with('grinder', $grinder)
-            ->with('producer', $producer);
+            ->with('producer', $grinder->grinder_producer->name)
+            ->with('producers', DB::table('grinder_producers')->select(['id','name'])->get());
+    }
+
+    public function destroy(Grinder $grinder)
+    {
+        $grinder->delete();
+
+        return response()->json(['message' => 'Grinder has been removed.']);
     }
 }

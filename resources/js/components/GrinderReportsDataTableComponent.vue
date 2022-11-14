@@ -3,13 +3,10 @@
         <thead>
         <tr>
             <th class="text-left">
-                Grinder producer
+                Grinder name
             </th>
             <th class="text-left">
-                Grinder model
-            </th>
-            <th v-if="this.is_admin" class="text-left">
-                Is verified
+                Submission date
             </th>
             <th class="text-left">
                 Details
@@ -18,23 +15,20 @@
         </thead>
         <tbody>
         <tr
-            v-for="grinder in grinders"
-            :key="grinder.model"
+            v-for="report in reports"
+            :key="report.id"
         >
             <td>
-                {{ grinder.grinder_producer.name }}
+                {{ report.grinder.model }}
             </td>
             <td>
-                {{ grinder.model }}
-            </td>
-            <td v-if="this.is_admin">
-                {{ grinder.is_verified }}
+                {{ report.created_at }}
             </td>
             <td>
                 <v-btn
                     color="primary"
                     rounder="lg"
-                    :href="this.grinder_link + '/' + grinder.id"
+                    :href="this.report_link + '/' + report.id"
                 >
                     Details
                 </v-btn>
@@ -46,7 +40,7 @@
 <script>
 export default {
     components: {},
-    props: ["grinders","grinder_link","is_admin"]
+    props: ["reports","report_link"]
 }
 </script>
 
