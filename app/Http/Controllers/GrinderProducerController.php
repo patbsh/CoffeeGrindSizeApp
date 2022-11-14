@@ -21,4 +21,11 @@ class GrinderProducerController extends Controller
         return view('producers.show')
             ->with('producer', $producer);
     }
+
+    public function destroy(GrinderProducer $producer)
+    {
+        $producer->delete();
+
+        return response()->json(['message' => 'Producer has been removed.']);
+    }
 }

@@ -13,6 +13,14 @@
                         class="mx-2">
                         Go back to the list
                     </v-btn>
+                    <v-btn
+                        v-if="is_admin"
+                        color="danger"
+                        rounder="lg"
+                        @click="removeProducer"
+                        class="m-2">
+                        Remove the producer
+                    </v-btn>
                 </div>
             </div>
         </div>
@@ -22,6 +30,16 @@
 <script>
 export default {
     components: {},
-    props: ['producer']
+    props: ['producer','is_admin'],
+    methods: {
+        removeProducer: function () {
+            axios.delete('/producers/' + this.producer.id)
+                .then((response) =>{
+                })
+                .catch((error) => {
+                });
+            window.location.href = '/producers';
+        }
+    },
 }
 </script>
