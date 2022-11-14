@@ -67,4 +67,11 @@ class GrinderController extends Controller
             ->with('grinder', $grinder)
             ->with('producer', $producer);
     }
+
+    public function destroy(Grinder $grinder)
+    {
+        $grinder->delete();
+
+        return response()->json(['message' => 'Grinder has been removed.']);
+    }
 }

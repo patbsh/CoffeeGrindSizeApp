@@ -57,7 +57,8 @@ export default {
             axios.delete('/grinder-reports/' + this.report.id)
                 .then((response) =>{
                 })
-                .catch(error => this.reportForm.errors.record(error.response.data));
+                .catch((error) => {
+                });
                 window.location.href = '/grinder-reports';
         }
     }

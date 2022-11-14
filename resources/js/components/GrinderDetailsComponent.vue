@@ -54,6 +54,14 @@
                         class="mx-2">
                         Request changes to the grinder
                     </v-btn>
+                    <v-btn
+                        v-if="is_admin"
+                        color="danger"
+                        rounder="lg"
+                        @click="removeGrinder"
+                        class="m-2">
+                        Remove the report
+                    </v-btn>
                 </div>
                 <grinder-report-form-component v-model="showReportModal" :grinder="grinder"></grinder-report-form-component>
             </div>
@@ -64,7 +72,7 @@
 <script>
 export default {
     components: {},
-    props: ['grinder', 'producer'],
+    props: ['grinder','producer','is_admin'],
     data() {
         return {
             showReportModal: false,
@@ -75,7 +83,16 @@ export default {
     created() {
     },
     computed: {},
-    methods: {},
+    methods: {
+        removeGrinder: function () {
+            axios.delete('/grinders/' + this.grinder.id)
+                .then((response) =>{
+                })
+                .catch((error) => {
+                });
+            window.location.href = '/grinders';
+        }
+    },
 
 }
 </script>
