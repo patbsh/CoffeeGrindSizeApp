@@ -7,6 +7,7 @@ use App\Http\Requests\StoreGrinderRequest;
 use App\Models\Grinder;
 use App\Models\GrinderProducer;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 
 class GrinderController extends Controller
 {
@@ -62,10 +63,10 @@ class GrinderController extends Controller
 
     public function show(Grinder $grinder)
     {
-        $producer = $grinder->grinder_producer->name;
         return view('grinders.show')
             ->with('grinder', $grinder)
-            ->with('producer', $producer);
+            ->with('producer', $grinder->grinder_producer->name)
+            ->with('producers', DB::table('grinder_producers')->select(['id','name'])->get());
     }
 
     public function destroy(Grinder $grinder)

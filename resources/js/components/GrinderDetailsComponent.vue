@@ -73,14 +73,23 @@
                     </v-btn>
                     <v-btn
                         v-if="is_admin"
+                        color="primary"
+                        rounder="lg"
+                        @click="showEditGrinderModal = true"
+                        class="m-2">
+                        Edit the grinder
+                    </v-btn>
+                    <v-btn
+                        v-if="is_admin"
                         color="danger"
                         rounder="lg"
                         @click="removeGrinder"
                         class="m-2">
-                        Remove the report
+                        Remove the grinder
                     </v-btn>
                 </div>
                 <grinder-report-form-component v-model="showReportModal" :grinder="grinder"></grinder-report-form-component>
+                <grinder-edit-form-component v-model="showEditGrinderModal" :grinder="grinder" :producers="producers"></grinder-edit-form-component>
             </div>
         </div>
     </div>
@@ -88,10 +97,10 @@
 
 <script>
 export default {
-    components: {},
-    props: ['grinder','producer','is_admin'],
+    props: ['grinder','producer','producers','is_admin'],
     data() {
         return {
+            showEditGrinderModal: false,
             showReportModal: false,
             status: this.grinder.is_verified,
             statuses: [

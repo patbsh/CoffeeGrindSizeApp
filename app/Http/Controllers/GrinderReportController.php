@@ -8,6 +8,7 @@ use App\Models\GrinderProducer;
 use App\Models\GrinderReport;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class GrinderReportController extends Controller
 {
@@ -20,15 +21,11 @@ class GrinderReportController extends Controller
 
     public function show(GrinderReport $grinderReport)
     {
-        $grinder = $grinderReport->grinder;
-        $producer = $grinderReport->grinder->grinder_producer;
-        $producers = GrinderProducer::all();
-
         return view('grinder-reports.show')
             ->with('report', $grinderReport)
-            ->with('grinder', $grinder)
-            ->with('producer', $producer)
-            ->with('producers', $producers);
+            ->with('grinder', $grinderReport->grinder)
+            ->with('producer', $grinderReport->grinder->grinder_producer)
+            ->with('producers', DB::table('grinder_producers')->select(['id','name'])->get());
     }
 
     public function store(StoreGrinderReportRequest $request): JsonResponse
