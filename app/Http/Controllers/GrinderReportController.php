@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreGrinderReportRequest;
+use App\Models\GrinderProducer;
 use App\Models\GrinderReport;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -18,7 +19,15 @@ class GrinderReportController extends Controller
 
     public function show(GrinderReport $grinderReport)
     {
-        return view('grinder-reports.show')->with('report', $grinderReport);
+        $grinder = $grinderReport->grinder;
+        $producer = $grinderReport->grinder->grinder_producer;
+        $producers = GrinderProducer::all();
+
+        return view('grinder-reports.show')
+            ->with('report', $grinderReport)
+            ->with('grinder', $grinder)
+            ->with('producer', $producer)
+            ->with('producers', $producers);
     }
 
     public function store(StoreGrinderReportRequest $request): JsonResponse

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateGrinderRequest;
 use App\Http\Requests\StoreGrinderRequest;
 use App\Models\Grinder;
 use App\Models\GrinderProducer;
@@ -49,6 +50,14 @@ class GrinderController extends Controller
         } else {
             return response()->json(['message' => 'Something went wrong.']);
         }
+    }
+
+    public function update(UpdateGrinderRequest $request, Grinder $grinder)
+    {
+        $grinder->update($request->validated());
+
+        return response()->json(['message' => 'Done.']);
+
     }
 
     public function show(Grinder $grinder)

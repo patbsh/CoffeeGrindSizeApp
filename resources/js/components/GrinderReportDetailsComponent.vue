@@ -19,10 +19,18 @@
                     <v-btn
                         color="primary"
                         rounder="lg"
+                        @click="showEditGrinderModal = true"
+                        class="mx-2">
+                        Edit the grinder
+                    </v-btn>
+                    <v-btn
+                        color="primary"
+                        rounder="lg"
                         :href="'/grinders/' + report.grinder_id"
                         class="mx-2">
                         Go to the grinder
                     </v-btn>
+                    <grinder-edit-form-component v-model="showEditGrinderModal" :grinder="grinder" :producers="producers"></grinder-edit-form-component>
                 </div>
             </div>
         </div>
@@ -31,6 +39,11 @@
 <script>
 export default {
     components: {},
-    props: ['report']
+    props: ['report','grinder','producers'],
+    data() {
+        return {
+            showEditGrinderModal: false,
+        }
+    }
 }
 </script>
