@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreGrinderReportRequest;
+use App\Models\Grinder;
 use App\Models\GrinderProducer;
 use App\Models\GrinderReport;
 use Illuminate\Http\JsonResponse;
@@ -37,5 +38,11 @@ class GrinderReportController extends Controller
         return response()->json(['message' => 'Report has been sent.']);
     }
 
+    public function destroy(GrinderReport $grinderReport)
+    {
+        $grinderReport->delete();
+
+        return response()->json(['message' => 'Report has been removed.']);
+    }
 
 }

@@ -20,15 +20,22 @@
                         color="primary"
                         rounder="lg"
                         @click="showEditGrinderModal = true"
-                        class="mx-2">
+                        class="m-2">
                         Edit the grinder
                     </v-btn>
                     <v-btn
                         color="primary"
                         rounder="lg"
                         :href="'/grinders/' + report.grinder_id"
-                        class="mx-2">
+                        class="m-2">
                         Go to the grinder
+                    </v-btn>
+                    <v-btn
+                        color="danger"
+                        rounder="lg"
+                        @click="removeGrinderReport"
+                        class="m-2">
+                        Remove the report
                     </v-btn>
                     <grinder-edit-form-component v-model="showEditGrinderModal" :grinder="grinder" :producers="producers"></grinder-edit-form-component>
                 </div>
@@ -43,6 +50,15 @@ export default {
     data() {
         return {
             showEditGrinderModal: false,
+        }
+    },
+    methods: {
+        removeGrinderReport: function () {
+            axios.delete('/grinder-reports/' + this.report.id)
+                .then((response) =>{
+                })
+                .catch(error => this.reportForm.errors.record(error.response.data));
+                window.location.href = '/grinder-reports';
         }
     }
 }

@@ -31,6 +31,6 @@ Route::resource('grinders', \App\Http\Controllers\GrinderController::class)
 Route::resource('producers', \App\Http\Controllers\GrinderProducerController::class)
     ->only('index', 'show');
 Route::resource('grinder-reports', \App\Http\Controllers\GrinderReportController::class)->only('store');
-Route::resource('grinder-reports', \App\Http\Controllers\GrinderReportController::class)->middleware('role:Admin')->only('index', 'show', 'delete');
+Route::resource('grinder-reports', \App\Http\Controllers\GrinderReportController::class)->middleware('role:Admin')->only('index', 'show', 'destroy');
 
 
