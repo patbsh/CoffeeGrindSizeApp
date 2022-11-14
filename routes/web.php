@@ -28,6 +28,12 @@ Route::resource('grinders', \App\Http\Controllers\GrinderController::class)
 Route::resource('grinders', \App\Http\Controllers\GrinderController::class)
     ->middleware('role:Admin')
     ->only('update', 'destroy');
+Route::resource('grinder-status', \App\Http\Controllers\GrinderStatusController::class)
+    ->middleware('role:Admin')
+    ->only('update');
+Route::resource('grinder-producer-status', \App\Http\Controllers\GrinderProducerStatusController::class)
+    ->middleware('role:Admin')
+    ->only('update');
 Route::resource('producers', \App\Http\Controllers\GrinderProducerController::class)
     ->only('index', 'show');
 Route::resource('producers', \App\Http\Controllers\GrinderProducerController::class)

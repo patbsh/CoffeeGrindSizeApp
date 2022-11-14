@@ -40,6 +40,23 @@
                             {{ grinder.notes }}
                         </p>
                     </div>
+                    <div v-if="is_admin">
+                        <v-select
+                            v-model="status"
+                            :items="statuses"
+                            item-title="name"
+                            item-value="value"
+                            label="Select"
+                            single-line>
+                        </v-select>
+                        <v-btn
+                            color="primary"
+                            rounder="lg"
+                            @click="saveStatus"
+                            class="m-2">
+                            Save status
+                        </v-btn>
+                    </div>
                     <v-btn
                         color="primary"
                         rounder="lg"
@@ -76,13 +93,13 @@ export default {
     data() {
         return {
             showReportModal: false,
+            status: this.grinder.is_verified,
+            statuses: [
+                { name: 'Verified', value: 1 },
+                { name: 'Unverified', value: 0 },
+            ],
         }
     },
-    mounted() {
-    },
-    created() {
-    },
-    computed: {},
     methods: {
         removeGrinder: function () {
             axios.delete('/grinders/' + this.grinder.id)
@@ -91,6 +108,15 @@ export default {
                 .catch((error) => {
                 });
             window.location.href = '/grinders';
+        },
+        saveStatus: function () {
+            axios.put('/grinder-status/' + this.grinder.id, {
+                is_verified: this.status
+            })
+                .then((response) => {
+                })
+                .catch((error) => {
+                });
         }
     },
 
