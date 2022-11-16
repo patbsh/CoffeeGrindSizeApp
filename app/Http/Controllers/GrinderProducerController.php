@@ -19,7 +19,8 @@ class GrinderProducerController extends Controller
     public function show(GrinderProducer $producer)
     {
         return view('producers.show')
-            ->with('producer', $producer);
+            ->with('producer', $producer)
+            ->with('grinders', $producer->verifiedGrinders()->get());
     }
 
     public function destroy(GrinderProducer $producer)

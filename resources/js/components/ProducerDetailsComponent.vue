@@ -1,13 +1,56 @@
 <template>
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card text-center">
-                <div class="card-header">
-                    <h1 class="h5">{{ producer.name }}</h1>
-                </div>
-                <div class="card-body">
-                    <div v-if="is_admin">
+            <v-card class="mx-auto">
+                <v-card-title>
+                    <h1 class="h5 text-center">Details about producer: {{ producer.name }}</h1>
+                </v-card-title>
+                <v-card-text>
+                    <div class="d-flex justify-content-center mb-4">
+                        <v-card elevation="2">
+                            <v-table>
+                                <thead>
+                                <tr>
+                                    <th class="text-left">
+                                        Grinder model
+                                    </th>
+                                    <th v-if="this.is_admin" class="text-left">
+                                        Is verified
+                                    </th>
+                                    <th class="text-left">
+                                        Grinder page
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr
+                                    v-for="grinder in grinders"
+                                    :key="grinder.model"
+                                >
+                                    <td>
+                                        {{ grinder.model }}
+                                    </td>
+                                    <td v-if="this.is_admin">
+                                        {{ grinder.is_verified }}
+                                    </td>
+                                    <td>
+                                        <v-btn
+                                            color="primary"
+                                            rounder="lg"
+                                            :href="this.grinder_link + '/' + grinder.id"
+                                        >
+                                            Details
+                                        </v-btn>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </v-table>
+                        </v-card>
+                    </div>
+                    <v-card class="col-4 mx-auto" v-if="is_admin" elevation="2">
+                        <h5 class="text-center">Producer status:</h5>
                         <v-select
+                            class="px-6"
                             v-model="status"
                             :items="statuses"
                             item-title="name"
@@ -15,14 +58,9 @@
                             label="Select"
                             single-line>
                         </v-select>
-                        <v-btn
-                            color="primary"
-                            rounder="lg"
-                            @click="saveStatus"
-                            class="m-2">
-                            Save status
-                        </v-btn>
-                    </div>
+                    </v-card>
+                </v-card-text>
+                <v-card-actions>
                     <v-btn
                         color="primary"
                         rounder="lg"
@@ -32,22 +70,29 @@
                     </v-btn>
                     <v-btn
                         v-if="is_admin"
+                        color="primary"
+                        rounder="lg"
+                        @click="saveStatus"
+                        class="m-2">
+                        Save status
+                    </v-btn>
+                    <v-btn
+                        v-if="is_admin"
                         color="danger"
                         rounder="lg"
                         @click="removeProducer"
                         class="m-2">
                         Remove the producer
                     </v-btn>
-                </div>
-            </div>
+                </v-card-actions>
+            </v-card>
         </div>
     </div>
 </template>
-
 <script>
 export default {
     components: {},
-    props: ['producer','is_admin'],
+    props: ['producer','is_admin','grinder_link','grinders'],
     data() {
         return {
             status: this.producer.is_verified,
