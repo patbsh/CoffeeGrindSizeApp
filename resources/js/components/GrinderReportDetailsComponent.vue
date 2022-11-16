@@ -21,7 +21,7 @@
                     <v-btn
                         color="danger"
                         rounder="lg"
-                        @click="removeGrinderReport"
+                        @click="showDeleteModal = true"
                         class="m-2">
                         Remove the report
                     </v-btn>
@@ -43,16 +43,33 @@
                     </v-btn>
                 </v-card-actions>
             </v-card>
-            <grinder-edit-form-component v-model="showEditGrinderModal" :grinder="grinder" :producers="producers"></grinder-edit-form-component>
+            <grinder-edit-form-component v-model="showEditGrinderModal" :grinder="grinder" :producers="producers">
+            </grinder-edit-form-component>
+            <vue-final-modal v-model="showDeleteModal" classes="modal-container" content-class="modal-content">
+                <span class="modal__title">Are you sure you want to delete this report?</span>
+                <div class="modal__action">
+                    <div class="d-flex justify-content-center">
+                        <v-btn class="mx-2 text-white" color="danger" @click="removeGrinderReport">
+                            confirm
+                        </v-btn>
+                        <v-btn class="mx-2" color="primary" @click="showDeleteModal = false">
+                            cancel
+                        </v-btn>
+                    </div>
+                </div>
+            </vue-final-modal>
         </div>
     </div>
 </template>
 <script>
+import {ModalsContainer, VueFinalModal} from "vue-final-modal";
+
 export default {
-    components: {},
+    components: { VueFinalModal, ModalsContainer},
     props: ['report','grinder','producers'],
     data() {
         return {
+            showDeleteModal: false,
             showEditGrinderModal: false,
         }
     },
@@ -68,3 +85,28 @@ export default {
     }
 }
 </script>
+<style scoped>
+:deep(.modal-container) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+:deep(.modal-content) {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    /*margin: 0 5rem;*/
+    max-width: 500px;
+    max-height: 90%;
+    padding: 1rem;
+    background: #fff;
+    overflow-y: auto;
+    border-radius: 5px;
+}
+
+.modal__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+</style>
