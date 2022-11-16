@@ -1,7 +1,7 @@
 <template>
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <v-card class="mx-auto">
+            <v-card class="mx-auto" elevation="2">
                 <v-card-title>
                     <h1 class="h5 text-center">Details about producer: {{ producer.name }}</h1>
                 </v-card-title>
@@ -48,9 +48,11 @@
                         </v-card>
                     </div>
                     <v-card class="col-4 mx-auto" v-if="is_admin" elevation="2">
-                        <h5 class="text-center">Producer status:</h5>
+                        <v-card-title>
+                            <h5 class="text-center">Producer status:</h5>
+                        </v-card-title>
                         <v-select
-                            class="px-6"
+                            class="px-4"
                             v-model="status"
                             :items="statuses"
                             item-title="name"
@@ -58,6 +60,16 @@
                             label="Select"
                             single-line>
                         </v-select>
+                        <v-card-actions>
+                            <v-btn
+                                v-if="is_admin"
+                                color="primary"
+                                rounder="lg"
+                                @click="saveStatus"
+                                class="m-2 mx-auto">
+                                Save status
+                            </v-btn>
+                        </v-card-actions>
                     </v-card>
                 </v-card-text>
                 <v-card-actions>
@@ -67,14 +79,6 @@
                         href="/producers"
                         class="mx-2">
                         Go back to the list
-                    </v-btn>
-                    <v-btn
-                        v-if="is_admin"
-                        color="primary"
-                        rounder="lg"
-                        @click="saveStatus"
-                        class="m-2">
-                        Save status
                     </v-btn>
                     <v-btn
                         v-if="is_admin"
