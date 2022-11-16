@@ -14,4 +14,10 @@ class GrinderProducer extends Model
     {
         return $this->hasMany(Grinder::class, 'grinder_producer_id', 'id');
     }
+
+    public function verifiedGrinders(): HasMany
+    {
+        return $this->hasMany(Grinder::class, 'grinder_producer_id', 'id')
+            ->where('is_verified', 1);
+    }
 }
