@@ -12,6 +12,8 @@ class Grinder extends Model
     use HasFactory;
     protected $guarded = [];
 
+    protected $appends = ['full_name'];
+
     public function grinder_producer(): BelongsTo
     {
         return $this->belongsTo(GrinderProducer::class);
@@ -20,6 +22,11 @@ class Grinder extends Model
     public function grinder_reports(): HasMany
     {
         return $this->hasMany(GrinderReport::class, 'grinder_id', 'id');
+    }
+
+    public function getFullNameAttribute(): string
+    {
+        return "{$this->grinder_producer->name} {$this->model}";
     }
 
 }
