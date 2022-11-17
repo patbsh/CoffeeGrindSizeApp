@@ -9,12 +9,12 @@
         <div class="row d-flex justify-content-around">
             <div class="col-5">
                 <label>Your grinder</label>
-                <v-select label="item_data" :options="grinders" v-model="userGrinder"/>
+                <v-select label="Select your grinder" :items="grinders" item-title="full_name" item-value="id" v-model="userGrinder" return-object/>
             </div>
             <div class="col-5">
                 <div v-if="recipeGrinderMode">
                     <label>Recipe grinder</label>
-                    <v-select class="mb-2" label="item_data" :options="grinders" v-model="recipeGrinder"/>
+                    <v-select label="Select recipe grinder" :items="grinders" item-title="full_name" item-value="id" v-model="recipeGrinder" return-object/>
                     <div class="input-group mt-2 mb-4" v-if="recipeGrinderMode&&recipeGrinder">
                         <span class="input-group-text" id="inputGroup-sizing-default">Setting</span>
                         <input type="number" min="1" v-model="recipeGrindNumber" class="form-control"
@@ -23,8 +23,7 @@
                 </div>
                 <div v-if="!recipeGrinderMode">
                     <label>What is the general grind size in the recipe?</label>
-                    <v-select class="mb-4" label="item_data" :options="generalGrindSizes"
-                              v-model="selectedGeneralGrindSize"/>
+                    <v-select label="Select general grind size" :items="generalGrindSizes" v-model="selectedGeneralGrindSize"/>
                 </div>
             </div>
         </div>
@@ -52,10 +51,8 @@
 </template>
 
 <script>
-import vSelect from 'vue-select';
 
 export default {
-    components: {vSelect},
     name: "GrindSizeComponent",
     props: ["grinders", "producers"],
     data() {
@@ -72,11 +69,6 @@ export default {
             showNewGrinderModal: false,
             showReportModal: false,
         }
-    },
-    mounted() {
-        this.grinders.map(function (x) {
-            return x.item_data = x.grinder_producer.name + ' ' + x.model;
-        });
     },
     updated() {
         if (this.recipeGrinderMode) {
