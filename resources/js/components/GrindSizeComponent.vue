@@ -1,6 +1,6 @@
 <template>
     <div class="text-center">
-        <h1>Grind size component</h1>
+        <h1>Grind setting wizard <v-icon color="deep-purple">mdi-wizard-hat</v-icon></h1>
         <div class="form-check form-switch mt-2 mb-2 d-flex justify-content-center">
             <input class="form-check-input mx-2" type="checkbox" id="flexSwitchCheckDefault"
                    v-model="recipeGrinderMode">
